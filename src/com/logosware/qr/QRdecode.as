@@ -22,22 +22,41 @@ import flash.system.System;
 import flash.utils.unescapeMultiByte;
 
 /**
- * QRã‚³ãƒ¼ãƒ‰ã‚’ãƒ‡ã‚³ãƒ¼ãƒ‰ã—ã¦æ–‡å­—åˆ—ã‚’æŠ½å‡ºã™ã‚‹ã‚¯ãƒ©ã‚¹ã§ã™
+ * QRdecode Class decodes QR Code to string.
+ *
  * @author Kenichi UENO
  **/
 public class QRdecode {
-    private var _xorPattern:Array = [1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0];
+
+    /**
+     * @private
+     */
+    private var _xorPattern:Vector.<int> = Vector.<int>([1, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 1, 0]);
+
+    /**
+     * @private
+     */
     private var _fixed:Array;
+
+    /**
+     * @private
+     */
     private var _qr:Array;
-//		private var _textObj:TextField = new TextField();
+
+    /**
+     * @private
+     */
     private var _qrVersion:uint = 5;
 
+    /**
+     * Constructor
+     */
     public function QRdecode() {
     }
 
     /**
-     * è§£æžã—ãŸã„QRã‚³ãƒ¼ãƒ‰ã‚’æ ¼ç´ã™ã‚‹é–¢æ•°
-     * @param qr QRã‚³ãƒ¼ãƒ‰ã®ãƒ“ãƒƒãƒˆãƒ‘ã‚¿ãƒ¼ãƒ³äºŒæ¬¡å…ƒé…åˆ—
+     * TBD
+     * @param TBD
      */
     public function setQR(qr:Array):void {
         _qr = qr;
@@ -45,9 +64,8 @@ public class QRdecode {
     }
 
     /**
-     * setQRã§æ ¼ç´ã—ãŸQRã‚³ãƒ¼ãƒ‰ã®ãƒ‡ã‚³ãƒ¼ãƒ‰ã‚’è¡Œã†é–¢æ•°
-     * @param retObj çµæžœã‚¤ãƒ™ãƒ³ãƒˆã«å«ã¾ã›ãŸã„ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆ
-     * @eventType QRdecoderEvent.QR_DECODE_COMPLETE
+     * TBD
+     * @param retObj TBD
      */
     public function startDecode(retObj:Object = null):String {
         // å½¢å¼æƒ…å ±ã®èª­ã¿å‡ºã—
@@ -80,7 +98,7 @@ public class QRdecode {
     }
 
     /**
-     * ãƒªãƒ¼ãƒ‰ã‚½ãƒ­ãƒ¢ãƒ³ã§8bitãšã¤èª­ã¿å–ã‚‹é–¢æ•°
+     * TBD
      */
     private function _RS8bit(__dataArray:Array, __codeNum:uint, __errorNum:uint, __snum:uint):void {
         var __i:uint;
@@ -181,9 +199,9 @@ public class QRdecode {
     }
 
     /**
-     * è¡Œåˆ—å¼ã‚’è¨ˆç®—ã™ã‚‹
-     * @param è¡Œåˆ—
-     * @param è¡Œåˆ—ã‚µã‚¤ã‚º
+     * TBD
+     * @param TBD
+     * @param TBD
      **/
     private function _calcDet(__Dat:Array, __size:uint):int {
         var __i:uint;
@@ -235,7 +253,7 @@ public class QRdecode {
     }
 
     /**
-     * ä¸‹ä¸‰è§’è¡Œåˆ—ã‚’ä½œã‚‹
+     * TBD
      */
     private function _reduceToLU(__a:Array, __num:uint):void {
         var __i:uint;
@@ -275,8 +293,8 @@ public class QRdecode {
     }
 
     /**
-     * ãƒã‚¤ãƒŠãƒªã‚’æ–‡å­—åˆ—ã«å¤‰æ›ã™ã‚‹
-     * @param ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿
+     * TBD
+     * @param TBD
      */
     private function _readData(__dataCode:Array):Array {
         var __num2alphabet:Array = [
@@ -386,8 +404,8 @@ public class QRdecode {
     }
 
     /**
-     * 32ãƒ“ãƒƒãƒˆã®ãƒ‡ãƒ¼ã‚¿ã‚’æ–‡å­—ã«ç›´ã™
-     * @param ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿
+     * TBD
+     * @param TBD
      */
     private function _Hex2String(__hex:uint):String {
         var __tempNum:uint = __hex >> 4;
@@ -397,9 +415,9 @@ public class QRdecode {
     }
 
     /**
-     * Næ–‡å­—åˆ†ã®æ–‡å­—åˆ—ã‚’èª­ã¿è¾¼ã‚€
-     * @param ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿
-     * @param ãƒ‡ãƒ¼ã‚¿é•·
+     * TBD
+     * @param TBD
+     * @param TBD
      */
     private function _readNstr(__bin:Array, __length:uint):String {
         var __i:uint;
@@ -415,9 +433,9 @@ public class QRdecode {
     }
 
     /**
-     * Næ–‡å­—åˆ†ã®æ•°å­—ã‚’èª­ã¿è¾¼ã‚€
-     * @param ãƒã‚¤ãƒŠãƒªãƒ‡ãƒ¼ã‚¿
-     * @param ãƒ‡ãƒ¼ã‚¿é•·
+     * TBD
+     * @param TBD
+     * @param TBD
      */
     private function _readNnumber(__bin:Array, __length:uint):uint {
         var __i:uint;
@@ -431,8 +449,8 @@ public class QRdecode {
     }
 
     /**
-     * 16é€²æ•°ã®é…åˆ—ã‚’2é€²æ•°ã®é…åˆ—ã«ç›´ã™
-     * @param 16é€²æ•°ãƒ‘ã‚¿ãƒ¼ãƒ³
+     * TBD
+     * @param TBD
      */
     private function _Hex2Bin(__hex:Array):Array {
         var __i:uint;
@@ -453,9 +471,9 @@ public class QRdecode {
     }
 
     /**
-     * ãƒªãƒ¼ãƒ‰ã‚½ãƒ­ãƒ¢ãƒ³è§£æž
-     * @param è§£æžãƒ‡ãƒ¼ã‚¿
-     * @param å½¢å¼æƒ…å ±
+     * TBD
+     * @param TBD
+     * @param TBD
      */
     private function _ReedSolomon(__data:Array, __type:Array):Array {
         var __RSblock:Array;
@@ -774,16 +792,16 @@ public class QRdecode {
     }
 
     /**
-     * 1ãƒã‚¤ãƒˆåˆ†ã®æƒ…å ±ã‚’èª­ã¿è¾¼ã‚€
-     * @param æƒ…å ±ãƒ“ãƒƒãƒˆåˆ—
+     * TBD
+     * @param TBD
      */
     private function _readByteData(__byte:Array):uint {
         return (__byte[0] << 7) + (__byte[1] << 6) + (__byte[2] << 5) + (__byte[3] << 4) + (__byte[4] << 3) + (__byte[5] << 2) + (__byte[6] << 1) + (__byte[7] << 0);
     }
 
     /**
-     * æƒ…å ±ã®ãƒã‚¤ãƒˆåˆ—ã‚’èª­ã¿å–ã‚‹
-     * @param QRã‚³ãƒ¼ãƒ‰ãƒ“ãƒƒãƒˆãƒ‘ã‚¿ãƒ¼ãƒ³
+     * TBD
+     * @param __qr TBD
      */
     private function _getWords(__qr:Array):Array {
         var __checkArray:Array = [];
@@ -850,7 +868,7 @@ public class QRdecode {
     }
 
     /**
-     * QRã‚³ãƒ¼ãƒ‰ã®ãƒžã‚¹ã‚¯ã‚’è§£é™¤ã™ã‚‹é–¢æ•°
+     * TBD
      * @param å½¢å¼æƒ…å ±
      */
     private function _unmask(__typeData:Array):Array {
@@ -923,7 +941,7 @@ public class QRdecode {
     }
 
     /**
-     * æ©Ÿèƒ½ãƒ‘ã‚¿ãƒ¼ãƒ³ã®ç¯„å›²ã‚’ãƒãƒ¼ã‚¸ãƒ§ãƒ³åˆ¥ã«æŒ‡å®šã™ã‚‹é–¢æ•°
+     * TBD
      */
     private function _makeFixed():void {
         var __i:int;

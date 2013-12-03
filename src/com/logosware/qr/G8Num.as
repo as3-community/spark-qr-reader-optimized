@@ -19,23 +19,23 @@
  **************************************************************************/
 package com.logosware.qr {
 /**
- * GF(2^8)ã‚’æ‰±ã†ãŸã‚ã®ã‚¯ãƒ©ã‚¹
+ * GF(2^8)
  **/
 public class G8Num {
     private var _vector:uint;
     private var _power:int;
 
     /**
-     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-     * @param power æŒ‡æ•°
+     * TBD
+     * @param power TBD
      **/
     public function G8Num(power:int) {
         setPower(power);
     }
 
     /**
-     * æŒ‡æ•°ã‚’æŒ‡å®šã™ã‚‹
-     * @param power æŒ‡æ•°
+     * TBD
+     * @param power TBD
      **/
     public function setPower(power:int):void {
         _power = power;
@@ -48,8 +48,8 @@ public class G8Num {
     }
 
     /**
-     * æ•´æ•°å€¤ã‚’æŒ‡å®šã™ã‚‹
-     * @param vector æ•´æ•°å€¤
+     * TBD
+     * @param vector TBD
      **/
     public function setVector(vector:uint):void {
         _vector = vector;
@@ -57,25 +57,25 @@ public class G8Num {
     }
 
     /**
-     * æ•´æ•°å€¤ã‚’å–å¾—ã™ã‚‹
-     * @param æ•´æ•°å€¤
+     * TBD
+     * @return TBD
      **/
     public function getVector():uint {
         return _vector;
     }
 
     /**
-     * æŒ‡æ•°ã‚’å–å¾—ã™ã‚‹
-     * @param æŒ‡æ•°
+     * I get the index
+     * @return index
      **/
     public function getPower():int {
         return _power;
     }
 
     /**
-     * è¶³ã—ç®—ã‚’è¡Œã†ã€‚æ•´æ•°å€¤åŒå£«ã®xorã‚’å–ã‚‹ã€‚
-     * @param other è¶³ã™å¯¾è±¡ã¨ãªã‚‹G4Numã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
-     * @param è¨ˆç®—çµæžœ
+     * I do addition . I take the xor of integer value to each other .
+     * @param other TBD
+     * @param TBD
      **/
     public function plus(other:G8Num):G8Num {
         var newVector:uint = _vector ^ other.getVector();
@@ -83,9 +83,9 @@ public class G8Num {
     }
 
     /**
-     * ä¹—ç®—ã‚’è¡Œã†ã€‚æŒ‡æ•°åŒå£«ã®è¶³ã—ç®—ã‚’è¡Œã†ã€‚
-     * @param other ã‹ã‘ã‚‹å¯¾è±¡ã¨ãªã‚‹G4Numã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
-     * @param è¨ˆç®—çµæžœ
+     * I do multiplication . I do addition of index between .
+     * @param other TBD
+     * @return TBD
      **/
     public function multiply(other:G8Num):G8Num {
         if ((_power < 0) || (other.getPower() < 0 )) {
@@ -96,8 +96,8 @@ public class G8Num {
     }
 
     /**
-     * é€†æ•°ã‚’è¨ˆç®—ã—ã¦å¾—ã‚‹ã€‚å…ƒã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¯å¤‰åŒ–ã—ãªã„ã€‚
-     * @param è¨ˆç®—çµæžœ
+     * I can calculate the inverse . The original instance is not changed .
+     * @return TBD
      **/
     public function inverse():G8Num {
         return new G8Num(255 - getPower());

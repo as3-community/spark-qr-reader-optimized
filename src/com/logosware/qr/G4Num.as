@@ -19,23 +19,31 @@
  **************************************************************************/
 package com.logosware.qr {
 /**
- * GF(2^4)ã‚’æ‰±ã†ãŸã‚ã®ã‚¯ãƒ©ã‚¹
+ * Classes for dealing with (2 ^ 4) GF
  **/
 public class G4Num {
+
+    /**
+     * @private
+     **/
     private var _vector:uint;
+
+    /**
+     * @private
+     **/
     private var _power:int;
 
     /**
-     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-     * @param power æŒ‡æ•°
+     * Constructor
+     * @param power index
      **/
     public function G4Num(power:int) {
         setPower(power);
     }
 
     /**
-     * æŒ‡æ•°ã‚’æŒ‡å®šã™ã‚‹
-     * @param power æŒ‡æ•°
+     * I specify the index
+     * @param power index
      **/
     public function setPower(power:int):void {
         _power = power;
@@ -48,8 +56,8 @@ public class G4Num {
     }
 
     /**
-     * æ•´æ•°å€¤ã‚’æŒ‡å®šã™ã‚‹
-     * @param vector æ•´æ•°å€¤
+     * I specify an integer value
+     * @param vector integer value
      **/
     public function setVector(vector:uint):void {
         _vector = vector;
@@ -57,25 +65,25 @@ public class G4Num {
     }
 
     /**
-     * æ•´æ•°å€¤ã‚’å–å¾—ã™ã‚‹
-     * @param æ•´æ•°å€¤
+     * I get the integer value
+     * @return index
      **/
     public function getVector():uint {
         return _vector;
     }
 
     /**
-     * æŒ‡æ•°ã‚’å–å¾—ã™ã‚‹
-     * @param æŒ‡æ•°
+     * I get the index
+     * @return index
      **/
     public function getPower():int {
         return _power;
     }
 
     /**
-     * è¶³ã—ç®—ã‚’è¡Œã†ã€‚æ•´æ•°å€¤åŒå£«ã®xorã‚’å–ã‚‹ã€‚
-     * @param other è¶³ã™å¯¾è±¡ã¨ãªã‚‹G4Numã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
-     * @param è¨ˆç®—çµæžœ
+     * I do addition . I take the xor of integer value to each other .
+     * @param other G4Num instance for which the plus
+     * @return calculation result
      **/
     public function plus(other:G4Num):G4Num {
         var newVector:uint = _vector ^ other.getVector();
@@ -83,9 +91,9 @@ public class G4Num {
     }
 
     /**
-     * ä¹—ç®—ã‚’è¡Œã†ã€‚æŒ‡æ•°åŒå£«ã®è¶³ã—ç®—ã‚’è¡Œã†ã€‚
-     * @param other ã‹ã‘ã‚‹å¯¾è±¡ã¨ãªã‚‹G4Numã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹
-     * @param è¨ˆç®—çµæžœ
+     * I do multiplication . I do addition of index between .‚
+     * @param other TBD
+     * @return TBD
      **/
     public function multiply(other:G4Num):G4Num {
         if ((_power == -1) || (other.getPower() == -1 )) {

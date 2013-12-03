@@ -28,6 +28,7 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 
 /**
+ * Will find the QR code from the image
  * @author UENO Kenichi
  */
 public class QRCodeDetecter implements IQRCodeDetecter {
@@ -63,7 +64,7 @@ public class QRCodeDetecter implements IQRCodeDetecter {
     ];
 
     /**
-     * 画像からQRコードを見つけ出します
+     * I will find the QR code from the image
      * @param    imageSource
      */
     public function QRCodeDetecter(imageSource:DisplayObject) {
@@ -79,7 +80,7 @@ public class QRCodeDetecter implements IQRCodeDetecter {
     }
 
     /**
-     * 見つかったQRコードの位置情報を返します
+     * I returns the position information of the QR code found
      * @return マーカー配列
      *    [
      *        {
@@ -121,7 +122,7 @@ public class QRCodeDetecter implements IQRCodeDetecter {
         var LabelingObj:LabelingClass = new LabelingClass();
         LabelingObj.Labeling(bd, 10, 0xFF88FFFE, true); // ラベリング実行
 
-        var pickedRects:Array = LabelingObj.getRects();
+        var pickedRects:Vector.<Rectangle> = LabelingObj.getRects();
         var pickedColor:Array = LabelingObj.getColors();
 
         LabelingObj = null;
@@ -148,6 +149,9 @@ public class QRCodeDetecter implements IQRCodeDetecter {
         return ret;
     }
 
+    /**
+     * @private
+     */
     private function _clipCodes(bd:BitmapData, codes:Array):Array {
         if (!codes)
             return null;
@@ -184,6 +188,9 @@ public class QRCodeDetecter implements IQRCodeDetecter {
         return ret;
     }
 
+    /**
+     * @private
+     */
     private function isMarker(ary:Array):Boolean {
         var c:Number = 0.75;
         var ave:Number = (ary[0] + ary[1] + ary[2] + ary[3] + ary[4]) / 7;
@@ -203,7 +210,7 @@ public class QRCodeDetecter implements IQRCodeDetecter {
      * @param    colorArray 矩形の色情報
      * @return 候補の配列
      */
-    private function _searchBorders(bmp:BitmapData, rectArray:Array, colorArray:Array):Array {
+    private function _searchBorders(bmp:BitmapData, rectArray:Vector.<Rectangle>, colorArray:Array):Array {
         if (!rectArray)
             return null;
         var retArray:Array = [];
@@ -270,6 +277,9 @@ public class QRCodeDetecter implements IQRCodeDetecter {
         return retArray;
     }
 
+    /**
+     * @private
+     */
     private function isNear(p1:Point, p2:Point, d:Number):Boolean {
         return(
                 (p1.x + d) > p2.x &&
@@ -280,7 +290,7 @@ public class QRCodeDetecter implements IQRCodeDetecter {
     }
 
     /**
-     * 直角関係にあるマーカーを探します
+     * I am looking for a marker that is in the right angle relationship
      * @param    borders 候補の配列
      * @return
      */

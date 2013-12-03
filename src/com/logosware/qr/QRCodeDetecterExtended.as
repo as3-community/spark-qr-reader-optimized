@@ -167,7 +167,7 @@ public class QRCodeDetecterExtended implements IQRCodeDetecter {
         var LabelingObj:LabelingClass = new LabelingClass();
         LabelingObj.Labeling(bd, 10, 0xFF88FFFE, true); // ラベリング実行
 
-        var pickedRects:Array = LabelingObj.getRects();
+        var pickedRects:Vector.<Rectangle> = LabelingObj.getRects();
         var pickedColor:Array = LabelingObj.getColors();
 
         LabelingObj = null;
@@ -242,7 +242,7 @@ public class QRCodeDetecterExtended implements IQRCodeDetecter {
      * @param    colorArray 矩形の色情報
      * @return 候補の配列
      */
-    private function _searchBorders(bmp:BitmapData, rectArray:Array, colorArray:Array):Array {
+    private function _searchBorders(bmp:BitmapData, rectArray:Vector.<Rectangle>, colorArray:Array):Array {
         var retArray:Array = [];
         for (var i:int = 0; i < rectArray.length; i++) {
             var count:int = 0;

@@ -19,30 +19,32 @@
  **************************************************************************/
 package com.logosware.qr {
 /**
- * ã‚¬ãƒ­ã‚¢ä½“GF(2^w) w=4, 8 ã®è¨ˆç®—ã«ç”¨ã„ã‚‹å®šæ•°
+ * TBD
  */
 public class GFstatic {
     /**
-     * GF(2^4)è¨ˆç®—ç”¨å®šæ•°.
-     * _power2vector_4[æŒ‡æ•°] = æ•´æ•°å€¤ ã®ã‚ˆã†ã«ä½¿ã„ã¾ã™
+     * GF (2 ^ 4) calculation constant .
+     * Use as _power2vector_4 [ index ] = integer value
      */
-    public static var _power2vector_4:Array = [
+    public static var _power2vector_4:Vector.<int> = Vector.<int>([
         1, 2, 4, 8, 3, 6, 12, 11,
         5, 10, 7, 14, 15, 13, 9, 1
-    ];
+    ]);
+
     /**
-     * GF(2^4)è¨ˆç®—ç”¨å®šæ•°.
-     * _power2vector_4[æ•´æ•°å€¤] = æŒ‡æ•° ã®ã‚ˆã†ã«ä½¿ã„ã¾ã™
+     * GF (2 ^ 4) calculation constant .
+     * Use as _power2vector_4 [ integer ] = index
      */
-    public static var _vector2power_4:Array = [
+    public static var _vector2power_4:Vector.<int> = Vector.<int>([
         -1, 0, 1, 4, 2, 8, 5, 10,
         3, 14, 9, 7, 6, 13, 11, 12
-    ];
+    ]);
+
     /**
-     * GF(2^8)è¨ˆç®—ç”¨å®šæ•°.
-     * _power2vector_8[æŒ‡æ•°] = æ•´æ•°å€¤ ã®ã‚ˆã†ã«ä½¿ã„ã¾ã™
+     * GF (2 ^ 8) for calculating constant .
+     * Use as _power2vector_8 [ index ] = integer value
      */
-    public static var _power2vector_8:Array = [
+    public static var _power2vector_8:Vector.<int> = Vector.<int>([
         1, 2, 4, 8, 16, 32, 64, 128, 29, 58, 116, 232, 205, 135, 19, 38,
         76, 152, 45, 90, 180, 117, 234, 201, 143, 3, 6, 12, 24, 48, 96, 192,
         157, 39, 78, 156, 37, 74, 148, 53, 106, 212, 181, 119, 238, 193, 159, 35,
@@ -59,12 +61,13 @@ public class GFstatic {
         81, 162, 89, 178, 121, 242, 249, 239, 195, 155, 43, 86, 172, 69, 138, 9,
         18, 36, 72, 144, 61, 122, 244, 245, 247, 243, 251, 235, 203, 139, 11, 22,
         44, 88, 176, 125, 250, 233, 207, 131, 27, 54, 108, 216, 173, 71, 142, 1
-    ];
+    ]);
+
     /**
-     * GF(2^8)è¨ˆç®—ç”¨å®šæ•°.
-     * _power2vector_8[æ•´æ•°] = æŒ‡æ•° ã®ã‚ˆã†ã«ä½¿ã„ã¾ã™
+     * GF (2 ^ 8) for calculating constant .
+     * Use as _power2vector_8 [ integer ] = index
      */
-    public static var _vector2power_8:Array = [
+    public static var _vector2power_8:Vector.<int> = Vector.<int>([
         -1, 0, 1, 25, 2, 50, 26, 198, 3, 223, 51, 238, 27, 104, 199, 75,
         4, 100, 224, 14, 52, 141, 239, 129, 28, 193, 105, 248, 200, 8, 76, 113,
         5, 138, 101, 47, 225, 36, 15, 33, 53, 147, 142, 218, 240, 18, 130, 69,
@@ -81,6 +84,6 @@ public class GFstatic {
         108, 161, 59, 82, 41, 157, 85, 170, 251, 96, 134, 177, 187, 204, 62, 90,
         203, 89, 95, 176, 156, 169, 160, 81, 11, 245, 22, 235, 122, 117, 44, 215,
         79, 174, 213, 233, 230, 231, 173, 232, 116, 214, 244, 234, 168, 80, 88, 175
-    ];
+    ]);
 }
 }

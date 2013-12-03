@@ -23,21 +23,21 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 
 /**
- * ãƒ©ãƒ™ãƒªãƒ³ã‚°ã‚’è¡Œã†ã‚¯ãƒ©ã‚¹ã§ã™
+ * TBD
  */
 public class LabelingClass {
     private var _bmp:BitmapData;
     private var _minSize:uint;
     private var _startColor:uint;
-    private var _pickedRects:Array = [];
+    private var _pickedRects:Vector.<Rectangle> = new Vector.<Rectangle>();
     private var _pickedColor:Array = [];
 
     /**
-     * ã‚³ãƒ³ã‚¹ãƒˆãƒ©ã‚¯ã‚¿
-     * @param bmp å…¥åŠ›ç”»åƒ(0x0, 0xFFFFFFFFã§ãƒ‹å€¤åŒ–ã•ã‚ŒãŸã‚‚ã®)
-     * @param minSize ç”»ç´ ã¨ã—ã¦èªã‚ã‚‹æœ€ä½Žã‚µã‚¤ã‚º(ãƒŽã‚¤ã‚ºå¯¾ç­–)
-     * @param startColor å¡—ã‚Šé–‹å§‹è‰²
-     * @param isChangeOriginal å…¥åŠ›ç”»åƒã‚’å®Ÿéš›ã«å¡—ã‚‹ã‹ã©ã†ã‹
+     * TBD
+     * @param bmp TBD
+     * @param minSize TBD
+     * @param startColor TBD
+     * @param isChangeOriginal TBD
      **/
     public function Labeling(bmp:BitmapData, minSize:uint = 10, startColor:uint = 0xFFFFFFFE, isChangeOriginal:Boolean = true):void {
         _minSize = minSize;
@@ -51,23 +51,23 @@ public class LabelingClass {
     }
 
     /**
-     * ãƒ©ãƒ™ãƒªãƒ³ã‚°ã—ãŸçµæžœå¾—ã‚‰ã‚ŒãŸç¯„å›²ã®çŸ©å½¢æƒ…å ±ã‚’è¿”ã—ã¾ã™
-     * @return çŸ©å½¢ã®é…åˆ—
+     * TBD
+     * @return TBD
      **/
-    public function getRects():Array {
+    public function getRects():Vector.<Rectangle> {
         return _pickedRects;
     }
 
     /**
-     * ãƒ©ãƒ™ãƒªãƒ³ã‚°ã—ãŸçµæžœå¾—ã‚‰ã‚ŒãŸç¯„å›²ã‚’å¡—ã£ãŸè‰²æƒ…å ±ã‚’è¿”ã—ã¾ã™
-     * @return è‰²ã®é…åˆ—
+     * TBD
+     * @return TBD
      **/
     public function getColors():Array {
         return _pickedColor;
     }
 
     /**
-     * ã‚³ã‚¢é–¢æ•°
+     * TBD
      **/
     private function _process():void {
         var _fillColor:uint = _startColor;
@@ -84,11 +84,11 @@ public class LabelingClass {
     }
 
     /**
-     * æ¬¡ã®pickcolorè‰²ã®é ˜åŸŸã‚’fillcolorè‰²ã«å¡—ã‚‹ã€‚pickcolorãŒè¦‹ã¤ã‹ã‚‰ãªã‘ã‚Œã°falseã‚’è¿”ã™
-     * @param bmp ç”»åƒ
-     * @param pickcolor æ¬¡ã®è‰²
-     * @param fillcolor å¡—ã‚‹è‰²
-     * @return ç›®çš„ã®è‰²ãŒã‚ã£ãŸã‹ã©ã†ã‹
+     * TBD
+     * @param bmp TBD
+     * @param pickcolor TBD
+     * @param fillcolor TBD
+     * @return TBD
      **/
     private function _paintNextLabel(bmp:BitmapData, pickcolor:uint, fillcolor:uint):Boolean {
         var rect:Rectangle = bmp.getColorBoundsRect(0xFFFFFFFF, pickcolor);

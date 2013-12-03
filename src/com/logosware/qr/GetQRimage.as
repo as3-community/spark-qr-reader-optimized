@@ -28,27 +28,63 @@ import flash.geom.Rectangle;
 import flash.utils.ByteArray;
 
 /**
- * 主にカメラ画像からQRコードを切り出すためのクラスです.
- * 画像上にあるVersion 1～10のQRコードを0,1からなる2次元配列に整形して返します
+ * GetQRimage Class recognizes QR Code from image.
+ *
+ * A class for cutting out the QR code image from the camera mainly.
+ * Returns a formatted in a two-dimensional array of 0 and 1 the QR Code Version 1 ~ 10 in the image on
+ *
  * @author Kenichi UENO
  **/
 public class GetQRimage {
-    private var _minVersion:uint = 1; // サポートする最低バージョン
-    private var _maxVersion:uint = 10; // サポートする最高バージョン
 
+    /**
+     * @private
+     * Minimum version that supports
+     **/
+    private var _minVersion:uint = 1;
+
+    /**
+     * @private
+     * Highest version that supports
+     **/
+    private var _maxVersion:uint = 10;
+
+    /**
+     * @private
+     **/
     private var _imageSource:DisplayObject = new Sprite();
+
+    /**
+     * @private
+     **/
     private var _resultImage:BitmapData = new BitmapData(1, 1);
+
+    /**
+     * @private
+     **/
     private var _resultArray:Array = [];
+
+    /**
+     * @private
+     **/
     private var _results:Array = [
         _resultImage,
         _resultArray
     ];
+
+    /**
+     * @private
+     **/
     private const _origin:Point = new Point(0, 0);
+
+    /**
+     * @private
+     **/
     private var detecter:IQRCodeDetecter;
 
     /**
-     * コンストラクタ.
-     * @param tempMC QRコード描画元のSpriteインスタンス
+     * Constructor.
+     * @param Sprite instance of tempMC QR code rendering source
      **/
     public function GetQRimage(source:DisplayObject, detecter:IQRCodeDetecter) {
         _imageSource = source;
@@ -56,7 +92,7 @@ public class GetQRimage {
     }
 
     /**
-     * 読み取りを実行します
+     * Run the reading
      * @eventType QRreaderEvent.QR_IMAGE_READ_COMPLETE
      */
     public function process():Array {
@@ -88,7 +124,7 @@ public class GetQRimage {
     }
 
     /**
-     * QRコードのビット情報を二次元配列化する
+     * I will be a two-dimensional array of bits of information QR code
      * @param bmpData 画像
      * @param qrInfo QRコード情報オブジェクト
      * @param ビットパターン配列
@@ -289,7 +325,7 @@ public class GetQRimage {
     }
 
     /**
-     * 画像中央付近の明るさを使って白と黒の閾値を計算する
+     * Calculating the threshold of black and white using the brightness of the image near the center
      * @param bmp 画像
      * @param 閾値
      */
@@ -309,7 +345,7 @@ public class GetQRimage {
     }
 
     /**
-     * 画像をグレースケール化する
+     * I want to gray scale of the image
      * @param bmp_src 元の画像
      * @param bmp_dst 結果格納先の画像
      * @param rect 適用範囲指定
@@ -328,7 +364,7 @@ public class GetQRimage {
     }
 
     /**
-     * 画像を２値化する
+     * I binarized image
      * @param bmp 2値化する画像
      * @param threshold 閾値
      **/
@@ -338,7 +374,7 @@ public class GetQRimage {
     }
 
     /**
-     * 境界上の点をピックアップする
+     * I want to pick up a point on the boundary
      * @param bmp 元画像
      * @param rect 対象画像位置
      * @param color 対象色
