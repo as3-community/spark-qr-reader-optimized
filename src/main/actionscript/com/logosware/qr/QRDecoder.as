@@ -26,7 +26,7 @@ import flash.utils.unescapeMultiByte;
  *
  * @author Kenichi UENO
  **/
-public class QRdecode {
+public class QRDecoder {
 
     /**
      * @private
@@ -51,7 +51,7 @@ public class QRdecode {
     /**
      * Constructor
      */
-    public function QRdecode() {
+    public function QRDecoder() {
     }
 
     /**
@@ -65,9 +65,8 @@ public class QRdecode {
 
     /**
      * TBD
-     * @param retObj TBD
      */
-    public function startDecode(retObj:Object = null):String {
+    public function startDecode():String {
         // å½¢å¼æƒ…å ±ã®èª­ã¿å‡ºã—
         var dataArray:Array;
         var unmaskedQR:Array;

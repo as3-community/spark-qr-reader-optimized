@@ -25,12 +25,12 @@ import flash.geom.Rectangle;
 /**
  * TBD
  */
-public class LabelingClass {
+public class QRLabeling {
     private var _bmp:BitmapData;
     private var _minSize:uint;
     private var _startColor:uint;
     private var _pickedRects:Vector.<Rectangle> = new Vector.<Rectangle>();
-    private var _pickedColor:Array = [];
+    private var _pickedColor:Vector.<uint> = new Vector.<uint>();
 
     /**
      * TBD
@@ -62,7 +62,7 @@ public class LabelingClass {
      * TBD
      * @return TBD
      **/
-    public function getColors():Array {
+    public function getColors():Vector.<uint> {
         return _pickedColor;
     }
 

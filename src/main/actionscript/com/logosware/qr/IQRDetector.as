@@ -24,7 +24,7 @@ package com.logosware.qr {
  *
  * @author Andras Csizmadia
  **/
-public interface IQRCodeDetecter {
+public interface IQRDetector {
 
     /**
      * TBD

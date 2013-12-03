@@ -19,8 +19,6 @@
  **************************************************************************/
 package com.logosware.qr {
 import flash.display.BitmapData;
-import flash.display.DisplayObject;
-import flash.display.Sprite;
 import flash.filters.ColorMatrixFilter;
 import flash.filters.ConvolutionFilter;
 import flash.geom.Point;
@@ -35,7 +33,7 @@ import flash.utils.ByteArray;
  *
  * @author Kenichi UENO
  **/
-public class GetQRimage {
+public class QRImage {
 
     /**
      * @private
@@ -48,11 +46,6 @@ public class GetQRimage {
      * Highest version that supports
      **/
     private var _maxVersion:uint = 10;
-
-    /**
-     * @private
-     **/
-    private var _imageSource:DisplayObject = new Sprite();
 
     /**
      * @private
@@ -80,23 +73,19 @@ public class GetQRimage {
     /**
      * @private
      **/
-    private var detecter:IQRCodeDetecter;
+    private var detecter:IQRDetector;
 
     /**
      * Constructor.
-     * @param Sprite instance of tempMC QR code rendering source
      **/
-    public function GetQRimage(source:DisplayObject, detecter:IQRCodeDetecter) {
-        _imageSource = source;
-        this.detecter = detecter;
+    public function QRImage() {
     }
 
     /**
      * Run the reading
-     * @eventType QRreaderEvent.QR_IMAGE_READ_COMPLETE
+     * @return the result array
      */
-    public function process():Array {
-        var QRCodes:Array = detecter.detect();
+    public function process(QRCodes:Array):Array {
         const n:uint = QRCodes ? QRCodes.length : 0;
         if (!n)
             return null;

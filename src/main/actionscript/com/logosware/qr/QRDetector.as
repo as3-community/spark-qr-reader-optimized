@@ -1,4 +1,4 @@
-/**************************************************************************
+﻿/**************************************************************************
  * LOGOSWARE Class Library.
  *
  * Copyright 2009 (c) LOGOSWARE (http://www.logosware.com) All rights reserved.
@@ -18,11 +18,7 @@
  *
  **************************************************************************/
 package com.logosware.qr {
-import com.quasimondo.bitmapdata.ThresholdBitmap;
-
-import flash.display.Bitmap;
 import flash.display.BitmapData;
-import flash.display.BlendMode;
 import flash.display.DisplayObject;
 import flash.filters.BlurFilter;
 import flash.filters.ColorMatrixFilter;
@@ -32,18 +28,34 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 
 /**
+ * Will find the QR code from the image
  * @author UENO Kenichi
  */
-public class QRCodeDetecterExtended implements IQRCodeDetecter {
+public class QRDetector implements IQRDetector {
+
+    /**
+     * @private
+     */
     private var image:DisplayObject;
+
+    /**
+     * @private
+     */
     private var bd:BitmapData;
+
+    /**
+     * @private
+     */
     private var bd2:BitmapData;
-    private var bd3:BitmapData;
-    //private var threshold:uint = 0xFF888888;
 
-    // Adaptive threshold object by Mario Klingemann
-    private var thresholdMap:ThresholdBitmap;
+    /**
+     * @private
+     */
+    private var threshold:uint = 0xFF888888;
 
+    /**
+     * @private
+     */
     private var grayConst:Array = [
         0.3, 0.59, 0.11, 0, 0,
         0.3, 0.59, 0.11, 0, 0,
@@ -51,63 +63,24 @@ public class QRCodeDetecterExtended implements IQRCodeDetecter {
         0, 0, 0, 0, 255
     ];
 
-    private var greyConstQuasi:Array = [
-        0.5, 0.5, 0, 0, 0,
-        0.5, 0.5, 0, 0, 0,
-        0.5, 0.5, 0, 0, 0,
-        0, 0, 0, 1, 0
-    ];
-
-
-    private var subtract:Boolean;
-    private var cropRect:Rectangle;
-    private var translateMatrix:Matrix;
-
-
     /**
-     * 画像からQRコードを見つけ出します
+     * I will find the QR code from the image
      * @param    imageSource
      */
-    public function QRCodeDetecterExtended(imageSource:DisplayObject, cRect:Rectangle = null, debug:Boolean = false, subtr:Boolean = false) {
+    public function QRDetector(imageSource:DisplayObject) {
         image = imageSource;
-        subtract = subtr;
-        cropRect = cRect;
-
-        if (cropRect == null) {
-            cropRect = new Rectangle(0, 0, image.width, image.height);
-        }
-
-        translateMatrix = new Matrix();
-        translateMatrix.translate(-cropRect.x, -cropRect.y);
-
-        /*
-         bd  = new BitmapData(image.width, image.height, true, 0x0);
-         bd2 = new BitmapData(image.width, image.height, true, 0x0);
-
-         // added to store blurdata for substract blur
-         // is faster, but gives more error when reading
-         if(subtract) bd3 = new BitmapData(image.width, image.height, true, 0x0);
-         */
-
-        bd = new BitmapData(cropRect.width, cropRect.height, true, 0x0);
-        bd2 = new BitmapData(cropRect.width, cropRect.height, true, 0x0);
-
-        // added to store blurdata for substract blur
-        // is faster, but gives more error when reading
-        if (subtract) bd3 = new BitmapData(cropRect.width, cropRect.height, true, 0x0);
-
+        bd = new BitmapData(image.width, image.height, true, 0x0);
+        bd2 = new BitmapData(image.width, image.height, true, 0x0);
         // debug code
-        if (debug) {
-            var bmp:Bitmap = new Bitmap(bd);
-            image.parent.addChild(bmp);
-            bmp.x = image.width;
-        }
-        // Adaptive threshold
-        thresholdMap = new ThresholdBitmap(bd, "ADAPTIVE");
+        /*
+         var bmp:Bitmap = new Bitmap( bd );
+         image.parent.addChild( bmp );
+         bmp.x = image.width;
+         */
     }
 
     /**
-     * 見つかったQRコードの位置情報を返します
+     * I returns the position information of the QR code found
      * @return マーカー配列
      *    [
      *        {
@@ -127,48 +100,30 @@ public class QRCodeDetecterExtended implements IQRCodeDetecter {
      *    ]
      */
     public function detect():Array {
-        var ret:Array = [];
         bd.lock();
-        //bd.draw(image);
+        bd.draw(image);
 
-        bd.draw(image, translateMatrix);
+        // グレー化
+        bd.applyFilter(bd, bd.rect, new Point(), new ColorMatrixFilter(grayConst));
+        bd.applyFilter(bd, bd.rect, new Point(), new ConvolutionFilter(5, 5, [
+            0, -1, -1, -1, 0,
+            -1, -1, -2, -1, -1,
+            -1, -2, 25, -2, -1,
+            -1, -1, -2, -1, -1,
+            0, -1, -1, -1, 0
+        ]));
+        bd.applyFilter(bd, bd.rect, new Point(), new BlurFilter(3, 3));
 
-        // choose one of the blur methods.
-        // substract method works faster, but detections contain more errors
-
-        if (subtract) {
-            bd.applyFilter(bd, bd.rect, new Point(), new ColorMatrixFilter(greyConstQuasi));
-            bd3.applyFilter(bd, bd.rect, new Point(), new BlurFilter(16, 16, 1));
-            bd.draw(bd3, null, null, BlendMode.SUBTRACT, bd.rect, false);
-        }
-        else {
-            bd.applyFilter(bd, bd.rect, new Point(), new ColorMatrixFilter(grayConst));
-
-            bd.applyFilter(bd, bd.rect, new Point(), new ConvolutionFilter(5, 5, [
-                0, -1, -1, -1, 0,
-                -1, -1, -2, -1, -1,
-                -1, -2, 25, -2, -1,
-                -1, -1, -2, -1, -1,
-                0, -1, -1, -1, 0
-            ]));
-
-            bd.applyFilter(bd, bd.rect, new Point(), new BlurFilter(2, 2));
-        }
-
-        //Adaptive threshold filter ThresholdBitmap object
-        thresholdMap.render();
-        bd.draw(thresholdMap);
-
-        //old method
-        //bd.threshold(bd, bd.rect, new Point(), ">", threshold, 0xFFFFFFFF, 0x0000FF00);
-        //bd.threshold(bd, bd.rect, new Point(), "!=", 0xFFFFFFFF, 0xFF000000);
+        // 二値化
+        bd.threshold(bd, bd.rect, new Point(), ">", threshold, 0xFFFFFFFF, 0x0000FF00);
+        bd.threshold(bd, bd.rect, new Point(), "!=", 0xFFFFFFFF, 0xFF000000);
 
         // ラベリング
-        var LabelingObj:LabelingClass = new LabelingClass();
+        var LabelingObj:QRLabeling = new QRLabeling();
         LabelingObj.Labeling(bd, 10, 0xFF88FFFE, true); // ラベリング実行
 
         var pickedRects:Vector.<Rectangle> = LabelingObj.getRects();
-        var pickedColor:Array = LabelingObj.getColors();
+        var pickedColor:Vector.<uint> = LabelingObj.getColors();
 
         LabelingObj = null;
 
@@ -181,7 +136,12 @@ public class QRCodeDetecterExtended implements IQRCodeDetecter {
         // 適切な角度で切り抜き
         var images:Array = _clipCodes(bd, codes);
 
-        const n:uint = images ? images.length : null;
+        const n:uint = images ? images.length : 0;
+
+        if (!n)
+            return null;
+
+        var ret:Array = [];
         for (var i:int = 0; i < n; i++) {
             ret.push({ image: images[i], borderColors: [codes[i][0].borderColor, codes[i][1].borderColor, codes[i][2].borderColor], originalLocation: [codes[i][0].borderRect, codes[i][1].borderRect, codes[i][2].borderRect] });
         }
@@ -189,7 +149,12 @@ public class QRCodeDetecterExtended implements IQRCodeDetecter {
         return ret;
     }
 
+    /**
+     * @private
+     */
     private function _clipCodes(bd:BitmapData, codes:Array):Array {
+        if (!codes)
+            return null;
         var ret:Array = [];
         const n:uint = codes.length;
         for (var i:int = 0; i < n; i++) {
@@ -223,6 +188,9 @@ public class QRCodeDetecterExtended implements IQRCodeDetecter {
         return ret;
     }
 
+    /**
+     * @private
+     */
     private function isMarker(ary:Array):Boolean {
         var c:Number = 0.75;
         var ave:Number = (ary[0] + ary[1] + ary[2] + ary[3] + ary[4]) / 7;
@@ -242,9 +210,12 @@ public class QRCodeDetecterExtended implements IQRCodeDetecter {
      * @param    colorArray 矩形の色情報
      * @return 候補の配列
      */
-    private function _searchBorders(bmp:BitmapData, rectArray:Vector.<Rectangle>, colorArray:Array):Array {
+    private function _searchBorders(bmp:BitmapData, rectArray:Vector.<Rectangle>, colorArray:Vector.<uint>):Array {
+        if (!rectArray)
+            return null;
         var retArray:Array = [];
-        for (var i:int = 0; i < rectArray.length; i++) {
+        const n:uint = rectArray.length;
+        for (var i:int = 0; i < n; i++) {
             var count:int = 0;
             var target:Number = 0;
             var tempRect:Rectangle = rectArray[i];// 外側
@@ -306,6 +277,9 @@ public class QRCodeDetecterExtended implements IQRCodeDetecter {
         return retArray;
     }
 
+    /**
+     * @private
+     */
     private function isNear(p1:Point, p2:Point, d:Number):Boolean {
         return(
                 (p1.x + d) > p2.x &&
@@ -316,13 +290,15 @@ public class QRCodeDetecterExtended implements IQRCodeDetecter {
     }
 
     /**
-     * 直角関係にあるマーカーを探します
+     * I am looking for a marker that is in the right angle relationship
      * @param    borders 候補の配列
      * @return
      */
     private function _searchCode(borders:Array):Array {
+        if (!borders)
+            return null;
         var ret:Array = [];
-        var loop:int = borders.length;
+        const loop:int = borders.length;
         for (var i:int = 0; i < (loop - 2); i++) {
             for (var j:int = i + 1; j < (loop - 1); j++) {
                 var vec:Point = borders[i].borderRect.topLeft.subtract(borders[j].borderRect.topLeft);
