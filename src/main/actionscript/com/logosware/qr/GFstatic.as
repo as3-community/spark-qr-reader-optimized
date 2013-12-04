@@ -20,6 +20,9 @@
 package com.logosware.qr {
 /**
  * TBD
+ *
+ * @author Kenichi UENO
+ * @contributor Andras Csizmadia - www.vpmedia.eu
  */
 public class GFstatic {
     /**

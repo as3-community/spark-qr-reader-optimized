@@ -29,7 +29,9 @@ import flash.geom.Rectangle;
 
 /**
  * Will find the QR code from the image
+ *
  * @author UENO Kenichi
+ * @contributor Andras Csizmadia - www.vpmedia.eu
  */
 public class QRDetector implements IQRDetector {
 
@@ -63,6 +65,10 @@ public class QRDetector implements IQRDetector {
         0, 0, 0, 0, 255
     ];
 
+    //----------------------------------
+    //  QRDetector
+    //----------------------------------
+
     /**
      * I will find the QR code from the image
      * @param    imageSource
@@ -71,13 +77,11 @@ public class QRDetector implements IQRDetector {
         image = imageSource;
         bd = new BitmapData(image.width, image.height, true, 0x0);
         bd2 = new BitmapData(image.width, image.height, true, 0x0);
-        // debug code
-        /*
-         var bmp:Bitmap = new Bitmap( bd );
-         image.parent.addChild( bmp );
-         bmp.x = image.width;
-         */
     }
+
+    //----------------------------------
+    //  API
+    //----------------------------------
 
     /**
      * I returns the position information of the QR code found
@@ -119,8 +123,8 @@ public class QRDetector implements IQRDetector {
         bd.threshold(bd, bd.rect, new Point(), "!=", 0xFFFFFFFF, 0xFF000000);
 
         // ラベリング
-        var LabelingObj:QRLabeling = new QRLabeling();
-        LabelingObj.Labeling(bd, 10, 0xFF88FFFE, true); // ラベリング実行
+        var LabelingObj:QRLabeling = new QRLabeling(bd, 10, 0xFF88FFFE, true);
+        //LabelingObj.Labeling(); // ラベリング実行
 
         var pickedRects:Vector.<Rectangle> = LabelingObj.getRects();
         var pickedColor:Vector.<uint> = LabelingObj.getColors();

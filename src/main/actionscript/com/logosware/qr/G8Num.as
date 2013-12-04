@@ -20,18 +20,36 @@
 package com.logosware.qr {
 /**
  * GF(2^8)
+ *
+ * @author Kenichi UENO
+ * @contributor Andras Csizmadia - www.vpmedia.eu
  **/
 public class G8Num {
+    /**
+     * @private
+     **/
     private var _vector:uint;
-    private var _power:int;
 
     /**
-     * TBD
+     * @private
+     **/
+    private var _power:int;
+
+    //----------------------------------
+    //  Constructor
+    //----------------------------------
+
+    /**
+     * Constructor
      * @param power TBD
      **/
     public function G8Num(power:int) {
         setPower(power);
     }
+
+    //----------------------------------
+    //  API
+    //----------------------------------
 
     /**
      * TBD

@@ -20,6 +20,9 @@
 package com.logosware.qr {
 /**
  * Classes for dealing with (2 ^ 4) GF
+ *
+ * @author Kenichi UENO
+ * @contributor Andras Csizmadia - www.vpmedia.eu
  **/
 public class G4Num {
 
@@ -33,6 +36,10 @@ public class G4Num {
      **/
     private var _power:int;
 
+    //----------------------------------
+    //  Constructor
+    //----------------------------------
+
     /**
      * Constructor
      * @param power index
@@ -40,6 +47,10 @@ public class G4Num {
     public function G4Num(power:int) {
         setPower(power);
     }
+
+    //----------------------------------
+    //  API
+    //----------------------------------
 
     /**
      * I specify the index

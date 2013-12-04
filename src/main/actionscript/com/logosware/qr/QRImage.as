@@ -26,12 +26,13 @@ import flash.geom.Rectangle;
 import flash.utils.ByteArray;
 
 /**
- * GetQRimage Class recognizes QR Code from image.
+ * QRImage Class recognizes QR Code from image.
  *
  * A class for cutting out the QR code image from the camera mainly.
  * Returns a formatted in a two-dimensional array of 0 and 1 the QR Code Version 1 ~ 10 in the image on
  *
  * @author Kenichi UENO
+ * @contributor Andras Csizmadia - www.vpmedia.eu
  **/
 public class QRImage {
 
@@ -70,16 +71,19 @@ public class QRImage {
      **/
     private const _origin:Point = new Point(0, 0);
 
-    /**
-     * @private
-     **/
-    private var detecter:IQRDetector;
+    //----------------------------------
+    //  Constructor
+    //----------------------------------
 
     /**
      * Constructor.
      **/
     public function QRImage() {
     }
+
+    //----------------------------------
+    //  API
+    //----------------------------------
 
     /**
      * Run the reading
@@ -92,15 +96,15 @@ public class QRImage {
         for (var i:int = 0; i < n; i++) {
             var bmpData:BitmapData = QRCodes[i].image;
             var colors:Array = QRCodes[i].borderColors;
-            // バージョンの取得
+            // Get the version
             var qrInfo:Object = _getVersion(bmpData, colors[0], colors[1], colors[2]);
             if (qrInfo.version > 0) {
-                // グリッドの結果を取得
+                // Get the results of the grid
                 _results = _getGrid(bmpData, qrInfo);
                 _resultImage = _results[0];
                 _resultArray = _results[1];
 
-                // グリッド中でもマーカー確認
+                // Marker also confirmed grid
                 var checkBmp:BitmapData = new BitmapData(_resultImage.width, _resultImage.height);
                 checkBmp.applyFilter(_resultImage, _resultImage.rect, _origin, new ConvolutionFilter(7, 7, [1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1], 33));
                 if ((checkBmp.getPixel(7, 7) == 0) && (checkBmp.getPixel(checkBmp.width - 8, 7) == 0) && (checkBmp.getPixel(7, checkBmp.height - 8) == 0)) {
@@ -108,15 +112,19 @@ public class QRImage {
                 }
             }
         }
-        // process終了
+        // process end
         return null;
     }
 
+    //----------------------------------
+    //  Private methods
+    //----------------------------------
+
     /**
      * I will be a two-dimensional array of bits of information QR code
-     * @param bmpData 画像
-     * @param qrInfo QRコード情報オブジェクト
-     * @param ビットパターン配列
+     * @param bmpData
+     * @param qrInfo QR code information object
+     * @return bit pattern array
      */
     private function _getGrid(bmpData:BitmapData, qrInfo:Object):Array {
         var __resultBmp:BitmapData = new BitmapData(8 + qrInfo.version * 4 + 17, 8 + qrInfo.version * 4 + 17);
@@ -202,9 +210,12 @@ public class QRImage {
     }
 
     /**
-     * QRコードのバージョンを判別する
-     * @param bmp 画像
-     * @param QRコード情報オブジェクト
+     * I determine which version of the QR code
+     * @param bmp source image
+     * @param tlColor
+     * @param trColor
+     * @param blColor
+     * @return QR code info object
      */
     private function _getVersion(bmp:BitmapData, tlColor:uint, trColor:uint, blColor:uint):Object {
         var i:uint;
@@ -242,7 +253,7 @@ public class QRImage {
                     }
                 }
                 var sum:Number = 0;
-                // 妥当性のチェック　白いマスが全部同じくらいのサイズだったらOK
+                // White mass check of validity is OK when you were about the same size all
                 for (var k:uint = 0; k < whiteArray.length; k++) {
                     sum += Number(whiteArray[k]);
                 }
@@ -286,7 +297,7 @@ public class QRImage {
                     }
                 }
                 sum = 0;
-                // 妥当性のチェック　白いマスが全部同じくらいのサイズだったらOK
+                // White mass check of validity is OK when you were about the same size all
                 for (k = 0; k < whiteArray.length; k++) {
                     sum += Number(whiteArray[k]);
                 }
@@ -315,8 +326,8 @@ public class QRImage {
 
     /**
      * Calculating the threshold of black and white using the brightness of the image near the center
-     * @param bmp 画像
-     * @param 閾値
+     * @param bmp TBD
+     * @return TBD
      */
     private function _getThreshold(bmp:BitmapData):uint {
         var rect:Rectangle = new Rectangle(bmp.width * 0.5, 0, 1, bmp.height);
@@ -326,7 +337,7 @@ public class QRImage {
         var tempArray:ByteArray = bmp_check.getPixels(bmp_check.rect);
         var sum:Number = 0.0;
         for (var i:uint = 0; i < bmp.height; i++) {
-            sum += tempArray[4 * i + 3]; // 緑成分で判定
+            sum += tempArray[4 * i + 3]; // TBD
         }
         sum /= bmp.height;
 
@@ -335,11 +346,11 @@ public class QRImage {
 
     /**
      * I want to gray scale of the image
-     * @param bmp_src 元の画像
-     * @param bmp_dst 結果格納先の画像
-     * @param rect 適用範囲指定
-     * @param point 適用原点指定
-     * @param constnum 明るさ補正
+     * @param bmp_src TBD
+     * @param bmp_dst TBD
+     * @param rect TBD
+     * @param point TBD
+     * @param constnum TBD
      **/
     private function _toGray(bmp_src:BitmapData, bmp_dst:BitmapData, rect:Rectangle, point:Point, constnum:Number = 2.5):void {
         var conGray:Array = [constnum * 0.3, constnum * 0.59, constnum * 0.11];
@@ -354,8 +365,8 @@ public class QRImage {
 
     /**
      * I binarized image
-     * @param bmp 2値化する画像
-     * @param threshold 閾値
+     * @param bmp TBD
+     * @param threshold TBD
      **/
     private function _binalization(bmp:BitmapData, threshold:uint = 0xFFFFFFFF):void {
         bmp.threshold(bmp, bmp.rect, new Point(0, 0), "<", threshold, 0xFF000000, 0xFFFFFFFF);
@@ -364,11 +375,11 @@ public class QRImage {
 
     /**
      * I want to pick up a point on the boundary
-     * @param bmp 元画像
-     * @param rect 対象画像位置
-     * @param color 対象色
-     * @param devide 分割個数
-     * @param 点情報
+     * @param bmp TBD
+     * @param rect TBD
+     * @param color TBD
+     * @param devide TBD
+     * @return TBD
      **/
     private function _getBorderPoints(bmp:BitmapData, rect:Rectangle, color:uint, divide:uint):Array {
         var tempX:uint;
@@ -384,7 +395,7 @@ public class QRImage {
             tempY = ( (rect.height - 1) * j ) / loopCount + rect.topLeft.y;
             tempBmpX.copyPixels(bmp, new Rectangle(rect.topLeft.x, tempY, rect.width, 1), new Point(0, 0));
             tempBmpY.copyPixels(bmp, new Rectangle(tempX, rect.topLeft.y, 1, rect.height), new Point(0, 0));
-            // 横線スキャン
+            // Horizontal line scan
             tempRect2 = tempBmpY.getColorBoundsRect(0xFFFFFFFF, color);
             tempPoint = new Point(
                     tempX + tempRect2.topLeft.x,
@@ -395,7 +406,7 @@ public class QRImage {
                     tempX + tempRect2.topLeft.x + tempRect2.width,
                     rect.topLeft.y + tempRect2.topLeft.y + tempRect2.height);
             borderPoints.push(tempPoint);
-            // 縦線スキャン
+            // Vertical line scan
             tempRect2 = tempBmpX.getColorBoundsRect(0xFFFFFFFF, color);
             tempPoint = new Point(
                     rect.topLeft.x + tempRect2.topLeft.x,

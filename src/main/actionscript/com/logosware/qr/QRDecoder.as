@@ -22,9 +22,10 @@ import flash.system.System;
 import flash.utils.unescapeMultiByte;
 
 /**
- * QRdecode Class decodes QR Code to string.
+ * QRDecoder Class decodes QR Code to string.
  *
  * @author Kenichi UENO
+ * @contributor Andras Csizmadia - www.vpmedia.eu
  **/
 public class QRDecoder {
 
@@ -48,15 +49,23 @@ public class QRDecoder {
      */
     private var _qrVersion:uint = 5;
 
+    //----------------------------------
+    //  QRDecoder
+    //----------------------------------
+
     /**
      * Constructor
      */
     public function QRDecoder() {
     }
 
+    //----------------------------------
+    //  API
+    //----------------------------------
+
     /**
-     * TBD
-     * @param TBD
+     * Function to store the QR code you want to analyze
+     * @param The source data
      */
     public function setQR(qr:Array):void {
         _qr = qr;
@@ -64,10 +73,10 @@ public class QRDecoder {
     }
 
     /**
-     * TBD
+     *  Function for decoding the QR code stored in setQR
      */
     public function startDecode():String {
-        // å½¢å¼æƒ…å ±ã®èª­ã¿å‡ºã—
+        // Read the form information
         var dataArray:Array;
         var unmaskedQR:Array;
         var wordArray:Array;
@@ -77,27 +86,26 @@ public class QRDecoder {
         var resultStr:String;
         var qrSize:uint = _qrVersion * 4 + 17;
         dataArray = _decode15_5();
-        // ãƒžã‚¹ã‚¯å‡¦ç†ã®è§£é™¤
+        // Unmask processing
         unmaskedQR = _unmask(dataArray);
-        // æ©Ÿèƒ½é ˜åŸŸã®è¨ˆç®—
+        // Calculation of the functional area
         _makeFixed();
-        // ãƒ‡ãƒ¼ã‚¿èª­ã¿å‡ºã—
+        // Read data
         wordArray = _getWords(unmaskedQR);
-        // ãƒªãƒ¼ãƒ‰ã‚½ãƒ­ãƒ¢ãƒ³
+        // Reed-Solomon
         trueWordArray = _ReedSolomon(wordArray, dataArray);
-        //ãƒ‡ãƒ¼ã‚¿ã‚³ãƒ¼ãƒ‰èªžå¾©å·
+        // Data code word decoding
         result = _readData(trueWordArray);
         resultFlg = result[0];
         if (resultFlg) {
             resultStr = result[1];
-//				_textObj.appendText( "èª­ã¿å–ã‚ŠæˆåŠŸï¼\n" + resultStr );
             return resultStr;
         }
         return null;
     }
 
     /**
-     * TBD
+     * Function to read each 8bit Reed-Solomon
      */
     private function _RS8bit(__dataArray:Array, __codeNum:uint, __errorNum:uint, __snum:uint):void {
         var __i:uint;
@@ -105,14 +113,14 @@ public class QRDecoder {
         var __index:uint;
         var __dataLength:uint = __dataArray.length;
         var __Snum:uint = __errorNum;
-        var __a:Array; // èª¤ã‚Šä½ç½®è¨ˆç®—ç”¨å¤‰æ•°
-        var __e:Array; // èª¤ã‚Šä½ç½®
-        var __S:Array = new Array(__Snum); // ã‚·ãƒ³ãƒ‰ãƒ­ãƒ¼ãƒ
-        var __s:Array = new Array(__snum); // èª¤ã‚Šä½ç½®å¤‰æ•°
+        var __a:Array; // TBD
+        var __e:Array; // TBD
+        var __S:Array = new Array(__Snum); // TBD
+        var __s:Array = new Array(__snum); // TBD
         var __tempNum1:G8Num;
         var __tempNum2:G8Num;
 
-        // ã‚·ãƒ³ãƒ‰ãƒ­ãƒ¼ãƒ é…åˆ—åˆæœŸåŒ–
+        // TBD
         for (__j = 0; __j < __Snum; __j++) {
             __S[__j] = new G8Num(-1);
         }
@@ -130,10 +138,10 @@ public class QRDecoder {
                 __j++;
             }
         }
-        if (__j == 0) { // 100%ã‚¨ãƒ©ãƒ¼ãªã—
+        if (__j == 0) { // TBD
             return;
         }
-        // ã‚¨ãƒ©ãƒ¼ã‚ã‚‹ã‹ã‚‚
+        // TBD
         for (__i = __snum; __i > 0; __i--) {
             if (_calcDet(__S, __i) != 0) {
                 break;
@@ -143,7 +151,7 @@ public class QRDecoder {
         __snum = __i;
         __a = new Array(__snum);
 
-        // èª¤ã‚Šè¨‚æ­£ä½ç½®å¤‰æ•°ã®è¨ˆç®—
+        // TBD
         for (__i = 0; __i < __snum; __i++) {
             __a[__i] = new Array(__snum + 1);
             for (__j = 0; __j <= __snum; __j++) {
@@ -161,7 +169,7 @@ public class QRDecoder {
             }
         }
 
-        //__aã¯å†åˆ©ç”¨
+        // TBD
         __e = new Array(__snum);
         __index = 0;
         for (__i = 0; __i < __dataLength; __i++) {
@@ -198,7 +206,7 @@ public class QRDecoder {
     }
 
     /**
-     * TBD
+     * I calculate the determinant
      * @param TBD
      * @param TBD
      **/
@@ -218,18 +226,18 @@ public class QRDecoder {
                 __temp[__j][__i] = new G8Num(__Dat[__i + __j].getPower());
             }
         }
-        //ä¸‰è§’è¡Œåˆ—ã«ã™ã‚‹
-        while (__doing < __size) { // ä¸€åˆ—ãšã¤ã€ã¤ã¶ã™
+        // TBD
+        while (__doing < __size) { // TBD
             for (__i = 0; __i < __size; __i++) {
                 if (__todo[__i] == 1) {
                     if (__temp[__i][__doing].getPower() >= 0) {
                         __result.multiply(__temp[__i][__doing]);
                         __tempNum = __temp[__i][__doing].inverse();
-                        //è‡ªèº«ã®åˆ—ã®é ­ã‚’ï¼‘ã«
+                        // TBD
                         for (__j = __doing; __j < __size; __j++) {
                             __temp[__i][__j] = __temp[__i][__j].multiply(__tempNum);
                         }
-                        //ãã®ä»–ã®åˆ—ã‚’å…¨éƒ¨å¼•ãç®—
+                        // TBD
                         for (__k = 0; __k < __size; __k++) {
                             if ((__k != __i) && (__todo[__k] == 1) && (__temp[__k][__doing].getPower() >= 0)) {
                                 __tempNum = new G8Num(__temp[__k][__doing].getPower());
@@ -252,7 +260,9 @@ public class QRDecoder {
     }
 
     /**
-     * TBD
+     * I make a lower triangular matrix
+     * @param __a TBD
+     * @param __num TBD
      */
     private function _reduceToLU(__a:Array, __num:uint):void {
         var __i:uint;
@@ -292,8 +302,9 @@ public class QRDecoder {
     }
 
     /**
-     * TBD
+     *  I want to convert to a string binary
      * @param TBD
+     * @return TBD
      */
     private function _readData(__dataCode:Array):Array {
         var __num2alphabet:Array = [
@@ -328,11 +339,11 @@ public class QRDecoder {
         }
 
         __dataBin = _Hex2Bin(__dataCode);
-        //ã©ã‚“ã©ã‚“èª­ã¿å–ã‚Š
+        // To read more and more
         while (__dataBin.length > 0) {
             __mode = _readNstr(__dataBin, 4);
             switch (__mode) {
-                case "0001": // æ•°å­—
+                case "0001": // number
                     __num = _readNnumber(__dataBin, __stringBits[__verMode][0]); // 10: ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã«ä¾å­˜
                     for (__i = 0; __i < __num; __i += 3) {
                         if ((__num - __i) == 2) {
@@ -347,7 +358,7 @@ public class QRDecoder {
                         }
                     }
                     break;
-                case "0010": // è‹±æ•°å­—
+                case "0010": // alphanumeric
                     __num = _readNnumber(__dataBin, __stringBits[__verMode][1]); // 9: ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã«ä¾å­˜
                     for (__i = 0; __i < __num; __i += 2) {
                         if ((__num - __i) > 1) {
@@ -372,7 +383,7 @@ public class QRDecoder {
                     __result += unescapeMultiByte(__tempStr);
 
                     break;
-                case "1000": // æ¼¢å­—
+                case "1000": // Kanji
                     __num = _readNnumber(__dataBin, __stringBits[__verMode][3]); // 8: ãƒãƒ¼ã‚¸ãƒ§ãƒ³ã«ä¾å­˜
                     for (__i = 0; __i < __num; __i++) {
                         __tempNum = _readNnumber(__dataBin, 13);
@@ -390,11 +401,11 @@ public class QRDecoder {
                 case "00":
                 case "0":
                     __tempNum = _readNnumber(__dataBin, __dataBin.length);
-                    //æ­£å¸¸çµ‚äº†
+                    // Successful completion
                     break;
-                default: //æœªå¯¾å¿œ
+                default: // Not Supported
                     __isSuccess = 0;
-                    __result += "***æœªå¯¾å¿œã®å½¢å¼ã‚’æ¤œå‡ºã—ã¾ã—ãŸã€‚";
+                    __result += "UNSUPPORTED_MODE_DETECTED: " + __mode;
                     continue;
                     break;
             }
@@ -403,8 +414,9 @@ public class QRDecoder {
     }
 
     /**
-     * TBD
+     * I heal in character 32-bit data
      * @param TBD
+     * @return TBD
      */
     private function _Hex2String(__hex:uint):String {
         var __tempNum:uint = __hex >> 4;
@@ -414,9 +426,10 @@ public class QRDecoder {
     }
 
     /**
-     * TBD
+     * I read a string of N characters
      * @param TBD
      * @param TBD
+     * @return TBD
      */
     private function _readNstr(__bin:Array, __length:uint):String {
         var __i:uint;
@@ -432,9 +445,10 @@ public class QRDecoder {
     }
 
     /**
-     * TBD
+     * I read a number of N characters
      * @param TBD
      * @param TBD
+     * @return TBD
      */
     private function _readNnumber(__bin:Array, __length:uint):uint {
         var __i:uint;
@@ -448,8 +462,9 @@ public class QRDecoder {
     }
 
     /**
-     * TBD
+     * I heal an array of binary sequence of hexadecimal
      * @param TBD
+     * @return TBD
      */
     private function _Hex2Bin(__hex:Array):Array {
         var __i:uint;
@@ -470,9 +485,10 @@ public class QRDecoder {
     }
 
     /**
-     * TBD
+     * Reed-Solomon analysis
      * @param TBD
      * @param TBD
+     * @return TBD
      */
     private function _ReedSolomon(__data:Array, __type:Array):Array {
         var __RSblock:Array;
@@ -727,7 +743,7 @@ public class QRDecoder {
                 }
                 break;
             default:
-//trace( _qrVersion + ", " + (__type[0] << 1) + (__type[1] << 0) );
+                //trace( _qrVersion + ", " + (__type[0] << 1) + (__type[1] << 0) );
                 return [];
                 break
         }
@@ -738,7 +754,7 @@ public class QRDecoder {
         __loopCount2 = __dataNum[__loopCount - 1];
         for (__j = 0; __j < __loopCount2; __j++) {
             for (__i = 0; __i < __loopCount; __i++) {
-                // ã“ã“ã«æ¡ä»¶ã‚’ã„ã‚Œãªã„ã¨ã„ã‘ãªã„æ°—ãŒã™ã‚‹ã€‚ j < datanum	ã¨ã‹
+                // TBD
                 if (__j < __dataNum[__i]) {
                     __RSblock[__i].push([ _readByteData(__data[__index++]) ]);
                 }
@@ -768,19 +784,19 @@ public class QRDecoder {
             __correctNum = 7;
         }
 
-        __loopCount2 = __errorNum[0]; // å…¨éƒ¨åŒã˜ãªã®ã§[0]
+        __loopCount2 = __errorNum[0]; // TBD
         for (__j = 0; __j < __loopCount2; __j++) {
             for (__i = 0; __i < __loopCount; __i++) {
                 __RSblock[__i].push([ _readByteData(__data[__index++]) ]);
             }
         }
-        //èª¤ã‚Šè¨‚æ­£
+        // TBD
         for (__i = 0; __i < __loopCount; __i++) {
             _RS8bit(__RSblock[__i], __dataNum[__i], __errorNum[__i], __correctNum);
         }
 
 
-        //ãƒ‡ãƒ¼ã‚¿å†é…ç½®
+        // TBD
         for (__i = 0; __i < __loopCount; __i++) {
             __loopCount2 = __dataNum[__i];
             for (__j = 0; __j < __loopCount2; __j++) {
@@ -791,16 +807,18 @@ public class QRDecoder {
     }
 
     /**
-     * TBD
+     * I read the information of one byte
      * @param TBD
+     * @return TBD
      */
     private function _readByteData(__byte:Array):uint {
         return (__byte[0] << 7) + (__byte[1] << 6) + (__byte[2] << 5) + (__byte[3] << 4) + (__byte[4] << 3) + (__byte[5] << 2) + (__byte[6] << 1) + (__byte[7] << 0);
     }
 
     /**
-     * TBD
+     * I read the bytes of information
      * @param __qr TBD
+     * @return TBD
      */
     private function _getWords(__qr:Array):Array {
         var __checkArray:Array = [];
@@ -867,8 +885,9 @@ public class QRDecoder {
     }
 
     /**
-     * TBD
-     * @param å½¢å¼æƒ…å ±
+     * Function you want to unmask QR code
+     * @param __typeData TBD
+     * @return TBD
      */
     private function _unmask(__typeData:Array):Array {
         var __qrSize:uint = _qrVersion * 4 + 17;
@@ -940,7 +959,7 @@ public class QRDecoder {
     }
 
     /**
-     * TBD
+     * Function to specify another version in the range of function pattern
      */
     private function _makeFixed():void {
         var __i:int;
@@ -1047,39 +1066,39 @@ public class QRDecoder {
     }
 
     /**
-     * åº§æ¨™(x,y)ã®ãƒ“ãƒƒãƒˆãƒ‘ã‚¿ãƒ¼ãƒ³ã‚’è¿”ã™é–¢æ•°
+     *  Function that returns a bit pattern of the coordinates (x, y)
      */
     private function _getQR(x:uint, y:uint):uint {
         return _qr[y][x];
     }
 
     /**
-     * æ©Ÿèƒ½ãƒ‘ã‚¿ãƒ¼ãƒ³æƒ…å ±ã‚’è¿”ã™é–¢æ•°
+     * Function that returns a function pattern information
      */
     private function _isFixed(x:uint, y:uint):uint {
         return _fixed[y][x];
     }
 
     /**
-     * å½¢å¼æƒ…å ±ã‚’ãƒ‡ã‚³ãƒ¼ãƒ‰ã™ã‚‹é–¢æ•°
+     * Function to decode the format information
      */
     private function _decode15_5():Array {
         var __str1:Array = new Array(15);
         var __str2:Array = new Array(15);
         var __i:uint;
         var __j:uint;
-        var __S:Array = new Array(5); // ã‚·ãƒ³ãƒ‰ãƒ­ãƒ¼ãƒ
-        var __s:Array = new Array(3); // èª¤ã‚Šä½ç½®å¤‰æ•°
+        var __S:Array = new Array(5); // syndrome
+        var __s:Array = new Array(3); // error position variable
         var __tempNum1:G4Num;
         var __tempNum2:G4Num;
-        var __retArray:Array = new Array(5); // ãƒ‡ãƒ¼ã‚¿éƒ¨
-        var __checkPattern:Array = new Array(15); //ãƒžã‚¹ã‚¯è§£é™¤å¾Œã®å½¢å¼æƒ…å ±
+        var __retArray:Array = new Array(5); // data portion
+        var __checkPattern:Array = new Array(15); // TBD
 
-        // ã‚·ãƒ³ãƒ‰ãƒ­ãƒ¼ãƒ é…åˆ—åˆæœŸåŒ–
+        // Syndrome array initialization
         for (__j = 0; __j < 5; __j++) {
             __S[__j] = new G4Num(-1);
         }
-        // å½¢å¼æƒ…å ±ã‚’å–å¾—
+        // Get the format information
         for (__i = 0; __i <= 5; __i++) {
             __str1[__i] = _getQR(8, __i);
         }
@@ -1096,7 +1115,7 @@ public class QRDecoder {
             __str2[8 + __i] = _getQR(8, _qrVersion * 4 + 10 + __i);
         }
 
-        // ãƒžã‚¹ã‚¯è§£é™¤
+        // Unmasked
         for (__i = 0; __i < 15; __i++) {
             __checkPattern[__i] = __str1[14 - __i] ^ _xorPattern[__i];
         }

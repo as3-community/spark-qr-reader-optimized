@@ -17,23 +17,16 @@
  * Place, Suite 330, Boston, MA 02111-1307 USA
  *
  **************************************************************************/
-package com.logosware.qr {
+package app {
+public class TestAssets {
 
-/**
- * Ingerface for QR code detection
- *
- * @author Andras Csizmadia
- **/
-public interface IQRDetector {
+    [Embed(source="./../../resources/qr_contact.png")]
+    public static var VCardQR:Class;
 
-    //----------------------------------
-    //  API
-    //----------------------------------
+    [Embed(source="./../../resources/qr_page.png")]
+    public static var URLQR:Class;
 
-    /**
-     * Detect the QR code in binary format
-     * @return The result
-     **/
-    function detect():Array;
+    public function TestAssets() {
+    }
 }
 }

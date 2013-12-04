@@ -23,80 +23,118 @@ import flash.geom.Point;
 import flash.geom.Rectangle;
 
 /**
- * TBD
+ * QRLabeling is responsible for the bitmap data labeling
+ *
+ * @author Kenichi UENO
+ * @contributor Andras Csizmadia - www.vpmedia.eu
  */
 public class QRLabeling {
-    private var _bmp:BitmapData;
-    private var _minSize:uint;
-    private var _startColor:uint;
-    private var _pickedRects:Vector.<Rectangle> = new Vector.<Rectangle>();
-    private var _pickedColor:Vector.<uint> = new Vector.<uint>();
 
     /**
-     * TBD
-     * @param bmp TBD
-     * @param minSize TBD
-     * @param startColor TBD
-     * @param isChangeOriginal TBD
+     * @private
      **/
-    public function Labeling(bmp:BitmapData, minSize:uint = 10, startColor:uint = 0xFFFFFFFE, isChangeOriginal:Boolean = true):void {
+    private var _bitmapData:BitmapData;
+
+    /**
+     * @private
+     **/
+    private var _minSize:uint;
+
+    /**
+     * @private
+     **/
+    private var _startColor:uint;
+
+    /**
+     * @private
+     **/
+    private var _pickedRectangles:Vector.<Rectangle>;
+
+    /**
+     * @private
+     **/
+    private var _pickedColors:Vector.<uint>;
+
+    //----------------------------------
+    //  Constructor
+    //----------------------------------
+
+    /**
+     * Constructor
+     *
+     * @param bitmapData Input image
+     * @param minSize The minimum size
+     * @param startColor Paint start color
+     * @param isChangeOriginal Whether to paint the actual image
+     **/
+    public function QRLabeling(bitmapData:BitmapData, minSize:uint = 10, startColor:uint = 0xFFFFFFFE, isChangeOriginal:Boolean = true) {
         _minSize = minSize;
         _startColor = startColor;
         if (isChangeOriginal) {
-            _bmp = bmp;
+            _bitmapData = bitmapData;
         } else {
-            _bmp = bmp.clone();
+            _bitmapData = bitmapData.clone();
         }
+        _pickedRectangles = new Vector.<Rectangle>();
+        _pickedColors = new Vector.<uint>()
         _process();
     }
 
+    //----------------------------------
+    //  API
+    //----------------------------------
+
     /**
-     * TBD
-     * @return TBD
+     * Returns the rectangle range information of a obtained as a result of the labeling
+     * @return List of picked rectangles
      **/
     public function getRects():Vector.<Rectangle> {
-        return _pickedRects;
+        return _pickedRectangles;
     }
 
     /**
-     * TBD
-     * @return TBD
+     * Returns the color information that painted a range obtained as a result of the labeling
+     * @return List of picked colors
      **/
     public function getColors():Vector.<uint> {
-        return _pickedColor;
+        return _pickedColors;
     }
 
+    //----------------------------------
+    //  Private methods
+    //----------------------------------
+
     /**
-     * TBD
+     * Core function
      **/
     private function _process():void {
-        var _fillColor:uint = _startColor;
-        var _rect:Rectangle;
-        while (_paintNextLabel(_bmp, 0xFF000000, _fillColor)) {
-            _rect = _bmp.getColorBoundsRect(0xFFFFFFFF, _fillColor);
-            if (( _rect.width > _minSize) && ( _rect.height > _minSize )) {
-                var _tempRect:Rectangle = _rect.clone();
-                _pickedRects.push(_tempRect);
-                _pickedColor.push(_fillColor);
+        var fillColor:uint = _startColor;
+        var rectangle:Rectangle;
+        while (_paintNextLabel(_bitmapData, 0xFF000000, fillColor)) {
+            rectangle = _bitmapData.getColorBoundsRect(0xFFFFFFFF, fillColor);
+            if (( rectangle.width > _minSize) && ( rectangle.height > _minSize )) {
+                var _tempRect:Rectangle = rectangle.clone();
+                _pickedRectangles.push(_tempRect);
+                _pickedColors.push(fillColor);
             }
-            _fillColor--;
+            fillColor--;
         }
     }
 
     /**
-     * TBD
-     * @param bmp TBD
-     * @param pickcolor TBD
-     * @param fillcolor TBD
-     * @return TBD
+     * I paint to color fillcolor the area of pickcolor color of the next . I return false pickcolor is not found
+     * @param bitmapData Source bitmap data
+     * @param pickcolor Color to pick
+     * @param fillcolor Color to paint
+     * @return Whether there was a color
      **/
-    private function _paintNextLabel(bmp:BitmapData, pickcolor:uint, fillcolor:uint):Boolean {
-        var rect:Rectangle = bmp.getColorBoundsRect(0xFFFFFFFF, pickcolor);
-        if ((rect.width > 0) && (rect.height > 0)) {
-            var tempBmp:BitmapData = new BitmapData(rect.width, 1);
-            tempBmp.copyPixels(bmp, new Rectangle(rect.topLeft.x, rect.topLeft.y, rect.width, 1), new Point(0, 0));
+    private function _paintNextLabel(bitmapData:BitmapData, pickcolor:uint, fillcolor:uint):Boolean {
+        var rectangle:Rectangle = bitmapData.getColorBoundsRect(0xFFFFFFFF, pickcolor);
+        if ((rectangle.width > 0) && (rectangle.height > 0)) {
+            var tempBmp:BitmapData = new BitmapData(rectangle.width, 1);
+            tempBmp.copyPixels(bitmapData, new Rectangle(rectangle.topLeft.x, rectangle.topLeft.y, rectangle.width, 1), new Point(0, 0));
             var rect2:Rectangle = tempBmp.getColorBoundsRect(0xFFFFFFFF, pickcolor);
-            bmp.floodFill(rect2.topLeft.x + rect.topLeft.x, rect2.topLeft.y + rect.topLeft.y, fillcolor);
+            bitmapData.floodFill(rect2.topLeft.x + rectangle.topLeft.x, rect2.topLeft.y + rectangle.topLeft.y, fillcolor);
             return true;
         }
         return false;
