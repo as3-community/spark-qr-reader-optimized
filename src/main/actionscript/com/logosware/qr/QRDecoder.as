@@ -568,7 +568,7 @@ public class QRDecoder {
                         __errorNum = [22, 22];
                         break;
                     case 3: // Q
-                        __RSblock = new Array(1);
+                        __RSblock = new Array(2);
                         __dataNum = [17, 17];
                         __errorNum = [18, 18];
                         break;
