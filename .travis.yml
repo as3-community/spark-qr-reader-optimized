@@ -45,10 +45,6 @@ before_script:
     - mkdir -p /usr/local/opt/adobe-air-sdk/libexec/frameworks/libs/player/11.1/
     - cp -f /usr/local/opt/adobe-air-sdk/libexec/frameworks/libs/player/14.0/playerglobal.swc /usr/local/opt/adobe-air-sdk/libexec/frameworks/libs/player/11.1/
     - export AIR_HOME="/usr/local/opt/adobe-air-sdk/libexec"
-    # Debug
-    - echo "AIR_HOME: $AIR_HOME"
-    - echo "FLEX_HOME: $FLEX_HOME"
-    - echo "FLASHPLAYER_DEBUGGER: $FLASHPLAYER_DEBUGGER"
 
 script:
     - ant
