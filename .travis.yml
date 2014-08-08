@@ -36,6 +36,7 @@ before_script:
     # Apache Flex SDK
     - wget -O flex_sdk.zip http://mirrors.gigenet.com/apache/flex/4.13.0/binaries/apache-flex-sdk-4.13.0-bin.zip
     - unzip -q flex_sdk.zip -d flex_sdk
+    - echo env.PLAYERGLOBAL_HOME=libs/player > flex_sdk/env.properties
     - mkdir -p flex_sdk/frameworks/libs/player/11.1/
     - mkdir -p flex_sdk/frameworks/libs/player/14.0/
     - cp -f /usr/local/opt/adobe-air-sdk/libexec/frameworks/libs/player/14.0/playerglobal.swc flex_sdk/frameworks/libs/player/11.1/
