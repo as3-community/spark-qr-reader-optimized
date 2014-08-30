@@ -18,7 +18,7 @@
  *
  **************************************************************************/
 package com.logosware.qr {
-import app.TestAssets;
+import app.TestAssetsQR;
 
 import flash.display.Bitmap;
 import flash.display.BitmapData;
@@ -48,17 +48,68 @@ public class QRDecoderTest {
 
     [Test]
     public function test_decodeURL():void {
-        const decodeResult:String = decodeBitmap(new TestAssets.URLQR());
+        const decodeResult:String = decodeBitmap(new TestAssetsQR.URLQR());
         Assert.assertEquals(decodeResult, "http://rubyflow.com");
     }
 
 
     [Test]
     public function test_decodeVCard():void {
-        const decodeResult:String = decodeBitmap(new TestAssets.VCardQR());
+        const decodeResult:String = decodeBitmap(new TestAssetsQR.VCardQR());
         Assert.assertTrue(decodeResult.indexOf("BEGIN:VCARD") == 0);
     }
 
+    
+    [Test]
+    public function test_group_5_02():void {
+        const decodeResult:String = decodeBitmap(new TestAssetsQR.Group_5_02_QR());
+        Assert.assertEquals(decodeResult, "MECARD:N:Sean Owen;TEL:+12125658770;EMAIL:srowen@google.com;;");
+    }
+
+    [Test]
+    public function test_group_5_08():void {
+        const decodeResult:String = decodeBitmap(new TestAssetsQR.Group_5_08_QR());
+        Assert.assertEquals(decodeResult, "MECARD:N:Sean Owen;TEL:+12125658770;EMAIL:srowen@google.com;;");
+    }
+
+    [Test]
+    public function test_group_5_11():void {
+        const decodeResult:String = decodeBitmap(new TestAssetsQR.Group_5_11_QR());
+        Assert.assertEquals(decodeResult, "MECARD:N:Sean Owen;TEL:+12125658770;EMAIL:srowen@google.com;;");
+    }
+
+    //
+
+    [Test]
+    public function test_group_6_05():void {
+        const decodeResult:String = decodeBitmap(new TestAssetsQR.Group_6_05_QR());
+        Assert.assertEquals(decodeResult, "1234567890");
+    }
+
+    [Test]
+    public function test_group_6_06():void {
+        const decodeResult:String = decodeBitmap(new TestAssetsQR.Group_6_06_QR());
+        Assert.assertEquals(decodeResult, "1234567890");
+    }
+
+    [Test]
+    public function test_group_6_07():void {
+        const decodeResult:String = decodeBitmap(new TestAssetsQR.Group_6_07_QR());
+        Assert.assertEquals(decodeResult, "1234567890");
+    }
+
+    [Test]
+    public function test_group_6_14():void {
+        const decodeResult:String = decodeBitmap(new TestAssetsQR.Group_6_14_QR());
+        Assert.assertEquals(decodeResult, "1234567890");
+    }
+
+    [Test]
+    public function test_group_6_15():void {
+        const decodeResult:String = decodeBitmap(new TestAssetsQR.Group_6_15_QR());
+        Assert.assertEquals(decodeResult, "TEST");
+    }
+    
     // HELPER
 
     private function decodeBitmap(image:Bitmap):String {
