@@ -81,8 +81,9 @@ configurations.antClassPath.each { File f ->
 
 String AIR_HOME = System.getenv('AIR_HOME')
 String FLEX_HOME = System.getenv('FLEX_HOME')
-ant.FLEX_HOME = "${FLEX_HOME}"
 String FLASH_PLAYER_EXE = System.getenv('FLASH_PLAYER_EXE')
+ant.FLEX_HOME = FLEX_HOME
+ant.FLASH_PLAYER_EXE = FLASH_PLAYER_EXE
 
 //----------------------------------
 //  Core
